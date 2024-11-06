@@ -1,0 +1,31 @@
+while 1
+    pause(1)
+    brick.SetColorMode(4, 2); % Set Color Sensor connected to Port 4 to Color Code Mode
+    color = brick.ColorCode(4); % Get Color on port 4.
+    display(color); % Print color code of the object.
+    brick.MoveMotor('AD', 50);
+   if (color == 5)
+    pause(1);
+    disp('Red');
+    brick.StopAllMotors('Brake');
+    pause(1);
+   end
+   if (color == 2)
+    pause(1);
+    disp('Blue');
+    brick.StopAllMotors('Brake');
+    brick.beep();
+    pause(0.5);
+    brick.beep();
+   end
+   if (color == 3)
+    pause(1);
+    disp('Green');
+    brick.StopAllMotors('Brake');
+    brick.beep();
+    pause(0.5);
+    brick.beep();
+    pause(0.5);
+    brick.beep();
+   end
+end
