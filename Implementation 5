@@ -1,0 +1,29 @@
+while true
+    % Read front ultrasonic sensor
+    distance1 = brick.UltrasonicDist(2); % Front sensor
+
+    disp(['Front Distance: ', num2str(distance1)]);
+
+    if distance1 < 15 % Obstacle detected in front
+        % Read right ultrasonic sensor
+        distance2 = brick.UltrasonicDist(3);
+        disp(['Right Distance: ', num2str(distance2)]);
+
+        if distance2 < 40 % Object detected on the right
+            % Turn left to avoid front and right obstacles
+            brick.MoveMotor('A', -50); % Left motor backward
+            brick.MoveMotor('D', 50);  % Right motor forward
+            pause(1);
+            brick.StopMotor('AD', 'Brake');
+        else
+            % Turn right if right is clear
+            brick.MoveMotor('A', 50); % Left motor forward
+            brick.MoveMotor('D', -50); % Right motor backward
+            pause(1);
+            brick.StopMotor('AD', 'Brake');
+        end
+    else
+        % Move forward if path is clear
+        brick.MoveMotor('AD', 50);
+    end
+end
