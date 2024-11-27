@@ -1,0 +1,73 @@
+while true
+    % Read front ultrasonic sensor
+    distance1 = brick.UltrasonicDist(2); % Front sensor
+    disp(['Front Distance: ', num2str(distance1)]);
+
+    % Read right ultrasonic sensor
+    distance2 = brick.UltrasonicDist(3); % Right sensor
+    disp(['Right Distance: ', num2str(distance2)]);
+
+    if distance1 < 17 % Obstacle detected in front
+         brick.MoveMotor('AD', -50); 
+         pause(.5);
+        % Stop motors
+        % brick.StopMotor('AD', 'Brake');
+        if distance2 < 30 % Right path is clear
+             brick.StopMotor('AD', 'Brake');
+            % Turnleft
+            brick.MoveMotor('A', -50);  % Left motor forward
+            brick.MoveMotor('D', 50); % Right motor backward
+            pause(0.7); % Adjust timing based on the maze's complexity
+            brick.MoveMotor('AD', 50);
+            pause(1)
+            % brick.StopMotor('AD', 'Brake');
+            % else
+            %     % Turn left if right is blocked
+            %     brick.MoveMotor('A', -50); % Left motor backward
+            %     brick.MoveMotor('D', 50);  % Right motor forward
+            %     pause(0.8);
+            %     brick.StopMotor('AD', 'Brake');
+            % end
+        end
+    else
+        % % Move forward if the path is clear
+        % distance2 = brick.UltrasonicDist(3); % Read right sensor
+        % if distance2 < 15 % If too close to the right wall
+        %     % Slight adjustment to the left to follow the wall
+        %     brick.MoveMotor('A', 30); % Left motor slower
+        %     brick.MoveMotor('D', 50); % Right motor faster
+        % elseif distance2 > 40 % If too far from the right wall
+        %     % Slight adjustment to the right to stay near the wall
+        %     brick.MoveMotor('A', 50); % Left motor faster
+        %     brick.MoveMotor('D', 30); % Right motor slower
+        % else
+        %     % Move straight
+        brick.MoveMotor('AD', 50);
+        pause(0.2)
+    end
+
+    if  distance2 > 85
+        % Turnleft
+        brick.MoveMotor('A', 50);  % Left motor forward
+        brick.MoveMotor('D', -50); % Right motor backward
+        pause(0.7);
+                brick.MoveMotor('AD', 50);
+        pause(2)
+    end
+     if  distance2 > 30 && distance2 < 40
+        % Turnleft
+        brick.MoveMotor('A', -50);  % Left motor forward
+        brick.MoveMotor('D', 50); % Right motor backward
+        pause(0.2);
+                brick.MoveMotor('AD', 50);
+        pause(2)
+    end
+
+        if  distance2 <5
+        brick.MoveMotor('AD', -50);
+        % Turnleft
+        brick.MoveMotor('A', -50);  % Left motor forward
+        brick.MoveMotor('D', 50); % Right motor backward
+        pause(0.1);
+    end
+end
