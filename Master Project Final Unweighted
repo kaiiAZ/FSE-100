@@ -1,0 +1,87 @@
+while true
+    % Read front ultrasonic sensor
+    distance1 = brick.UltrasonicDist(2);
+    disp(['Front Distance: ', num2str(distance1)]);
+
+    % Read right ultrasonic sensor
+    distance2 = brick.UltrasonicDist(3);
+    disp(['Right Distance: ', num2str(distance2)]);
+
+    brick.SetColorMode(4, 2); % Set Color Sensor connected to Port 4 to Color Code Mode
+    color = brick.ColorCode(4); % Get Color on port 4.
+    
+    if (color == 5)
+    brick.StopAllMotors('Brake');
+    pause(1);
+    end
+    if (color == 2 || color == 4)
+    global key
+    InitKeyboard();
+    while 1
+    pause(0.1);
+    switch key
+        case 'uparrow'
+            disp('Up Arrow Pressed!');
+            brick.MoveMotor('AD', 35);
+        case 'downarrow'
+            disp('Down Arrow Pressed!');
+            brick.MoveMotor('AD', -50);
+        case 'leftarrow'
+            brick.MoveMotor('D', 50);
+        case 'rightarrow'
+            brick.MoveMotor('A', 50);
+        case 'l'
+            disp('L');
+            brick.MoveMotorAngleRel('C', 10, 90, 'Brake');
+        case 'k'
+            disp('K');
+            brick.MoveMotorAngleRel('C', 10, -90, 'Brake');
+        case 0
+            disp('No Key Pressed!');
+            brick.StopAllMotors('Brake');
+        case 'q'
+            break;
+        end
+    end
+CloseKeyboard();
+    end
+
+
+    if distance1 < 17
+         brick.MoveMotor('AD', -50); 
+         pause(.5);
+        if distance2 < 40
+            brick.StopMotor('AD', 'Brake');
+            brick.MoveMotor('A', -50);
+            brick.MoveMotor('D', 50);
+            pause(0.6);
+            brick.MoveMotor('AD', 35);
+            pause(1)
+        end
+    else
+        brick.MoveMotor('AD', 35);
+        pause(0.2)
+    end
+
+    if  distance2 > 45
+        brick.MoveMotor('A', 50);
+        brick.MoveMotor('D', -50);
+        pause(0.7);
+                brick.MoveMotor('AD', 50);
+        pause(2)
+    end
+     if  distance2 > 40 && distance2 < 40
+        brick.MoveMotor('A', -50);
+        brick.MoveMotor('D', 50);
+        pause(0.2);
+                brick.MoveMotor('AD', 50);
+        pause(2)
+    end
+
+        if  distance2 <5
+        brick.MoveMotor('AD', -50);
+        brick.MoveMotor('A', -50);
+        brick.MoveMotor('D', 50);
+        pause(0.1);
+    end
+end
